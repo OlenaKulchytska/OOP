@@ -100,11 +100,13 @@ public class ListContainer<T> implements Iterable<T> {
     public Iterator<T> iterator() {
         return new Iterator<T>() {
             int counter;
+
             {
                 counter = 0;
             }
 
             @Override
+
             public boolean hasNext() {
                 return counter < size();
             }
