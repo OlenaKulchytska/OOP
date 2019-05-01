@@ -6,13 +6,13 @@ import java.util.*;
 import java.io.*;
 import java.util.concurrent.TimeUnit;
 
-
 public class Main {
-    public static Person persFind (int index, ListContainer<Person> pers){
-        Iterator<Person> myItr = pers.iterator();
+
+    public static Aboutme meFind(int id,ListContainer<Aboutme> me){
+        Iterator<Aboutme> myItr = me.iterator();
         while(myItr.hasNext()){
-            Person t = myItr.next();
-            if(t.getIndex() == index){
+            Aboutme t = myItr.next();
+            if(t.getId() == id){
                 return t;
             }
         }
@@ -23,9 +23,10 @@ public class Main {
         for(int i = 0;i < args.length;i++){
             if(args[i].equals("-auto")){
                 autoMode = true;
+                System.out.println("Автоматичний режим запущено");
             }
         }
-        ListContainer<Person> personList = new ListContainer<>();
+        ListContainer<Aboutme> aboutmeList = new ListContainer<>();
         Scanner scan = new Scanner(System.in);
         if(autoMode){
             try {
@@ -35,97 +36,119 @@ public class Main {
                 scan = new Scanner(System.in);
             }
         }
-        int index;
+        int command,id;
         while(true){
             if(autoMode){
                 try {
                     TimeUnit.SECONDS.sleep(1);
-                }catch(InterruptedException e){
+                }
+                catch(InterruptedException e){
 
                 }
             }
-            System.out.println("1 - додати людину");
-            System.out.println("2 - видалити людину");
-            System.out.println("3 - переглянути список людей");
-            System.out.println("4 - інформація про людину");
-            System.out.println("5 - записати список людей у файл");
-            System.out.println("6 - витягти список людей з файлу");
+            System.out.println("1 - додати клієнта");
+            System.out.println("2 - видалити клієнта");
+            System.out.println("3 - переглянути список клієнтів");
+            System.out.println("4 - опис клієнта");
+            System.out.println("5 - записати клієнтів в XML-файл");
+            System.out.println("6 - витягти клієнтів з XML-файлу");
             System.out.println("7 - вийти");
-            byte command = scan.nextByte();
+            command = scan.nextInt();
             switch(command){
                 case 1:
-                    System.out.println("Введіть П.І.Б людини:");
+                    System.out.println("Введіть назву клієнта:");
                     scan.nextLine();
-                    Person pers = new Person();
-                    pers.setName(scan.nextLine());
-                    personList.add(pers);
-                    System.out.println("Людину '"+pers.getName()+"' додано з індексом: "+pers.getIndex());
+                    Aboutme me = new Aboutme();
+                    me.setName(scan.nextLine());
+                    aboutmeList.add(me);
+                    System.out.println("Клієнта '"+me.getName()+"' додано з ідентифікатором: "+me.getId());
                     break;
                 case 2:
-                    System.out.println("Введіть індекс людини, щоб видалити:");
-                    index = scan.nextInt();
-                    if(!personList.remove(index)){
-                        System.err.println("Такої людини не знайдено!");
+                    System.out.println("Введіть ідентифікатор клієнта, щоб видалити:");
+                    id = scan.nextInt();
+                    if(!aboutmeList.remove(id)){
+                        System.err.println("Такого елемента не знайдено!");
                     }
                     else{
-                        System.out.println("Людину видалено із списку!");
+                        System.out.println("Елемент видалено!");
                     }
                     break;
                 case 3:
-                    Iterator<Person> myItr1 = personList.iterator();
+                    Iterator<Aboutme> myItr1 = aboutmeList.iterator();
                     while(myItr1.hasNext()){
-                        Person t = myItr1.next();
+                        Aboutme t = myItr1.next();
                         System.out.println(t.toString());
                     }
                     break;
                 case 4:
-                    System.out.println("Введіть індекс людини, щоб додати інформацію про неї: ");
-                    index = scan.nextInt();
-                    Person temp = persFind(index,personList);
+                    System.out.println("Введіть ID клієнта, щоб її редагувати: ");
+                    id = scan.nextInt();
+                    Aboutme temp = meFind(id,aboutmeList);
                     if(temp != null){
-                        System.out.println("Людину знайдено!");
+                        System.out.println("Клієнта знайдено!");
                         boolean exit = false;
                         while(!exit) {
                             System.out.println(temp.toString());
-                            System.out.println("1 - Змінити адресу");
-                            System.out.println("2 - Змінити номер телефону");
-                            System.out.println("3 - Змінити дату народження");
-                            System.out.println("4 - Змінити дату редагування інформації");
-                            System.out.println("5 - Повернутись до гол. меню");
-                            command  = scan.nextByte();
+                            System.out.println("1 - Змінити ім'я");
+                            System.out.println("2 - Змінити хобі");
+                            System.out.println("3 - Змінити колір очей");
+                            System.out.println("4 - Змінити вік");
+                            System.out.println("5 - Змінити стать");
+                            System.out.println("6 - Додати вимоги до партнера");
+                            System.out.println("7 - Повернутись до гол. меню");
+                            command  = scan.nextInt();
                             switch(command){
                                 case 1:
-                                    System.out.println("Введіть нову адресу:");
+                                    System.out.println("Введіть нове ім'я:");
                                     scan.nextLine();
-                                    temp.setAddress(scan.nextLine());
+                                    temp.setName(scan.nextLine());
                                     System.out.println("Успішно змінено!");
                                     break;
                                 case 2:
-                                    System.out.println("Введіть новий номер телефону:");
+                                    System.out.println("Введіть нове хобі:");
                                     scan.nextLine();
-                                    temp.setNumber(scan.nextLine());
+                                    temp.setHobby(scan.nextLine());
                                     System.out.println("Успішно змінено!");
                                     break;
                                 case 3:
-                                    System.out.println("Введіть нову дату народження:");
+                                    System.out.println("Введіть новий колір очей:");
                                     scan.nextLine();
-                                    temp.setDateOfBitrh(scan.nextLine());
+                                    temp.setEyes(scan.nextLine());
                                     System.out.println("Успішно змінено!");
                                     break;
                                 case 4:
-                                    System.out.println("Введіть нову дату редагування:");
-                                    scan.nextLine();
-                                    temp.setDateOfEditing(scan.nextLine());
+                                    System.out.println("Введіть новий вік:");
+                                    temp.setAge(scan.nextInt());
                                     System.out.println("Успішно змінено!");
                                     break;
                                 case 5:
+                                    System.out.println("Введіть нову стать:");
+                                    scan.nextLine();
+                                    temp.setStat(scan.nextLine());
+                                    System.out.println("Успішно змінено!");
+                                    break;
+                                case 6:
+                                    System.out.println("Додавання нових вимог до пратнера:");
+                                    scan.nextLine();
+                                    Partner part = new Partner();
+                                    System.out.println("Хобі:");
+                                    part.setHobby(scan.nextLine());
+                                    System.out.println("Вік:");
+                                    part.setAge(scan.nextInt());
+                                    System.out.println("Колір очей:");
+                                    scan.nextLine();
+                                    part.setEyes(scan.nextLine());
+                                    temp.addPartner(part);
+                                    System.out.println("Успішно додано!");
+                                    break;
+                                case 7:
                                     exit = true;
                                     break;
                             }
                         }
                     }
                     else{
-                        System.out.println("Людину не знайдено!");
+                        System.out.println("Клієнта не знайдено!");
                     }
                     break;
                 case 5:
@@ -133,14 +156,14 @@ public class Main {
                     System.out.println("----Введіть назву файлу:");
                     scan.nextLine();
                     String file_name = scan.nextLine();
-                    System.out.println("----Виберіть потрібну папку, щоб зберегти файл:");
+                    System.out.println("----Виберіть потрібну директорію, щоб зберегти файл:");
                     String path = FileManager.selectDir(scan) + "\\" + file_name;
                     if (!(new File(path)).exists()) {
                         File newFile = new File(path);
                         try
                         {
                             if(newFile.createNewFile())
-                                System.out.println("Файл '"+file_name+"' створено!");
+                                System.out.println("***Файл '"+file_name+"' було створено!");
                         }
                         catch(IOException ex){
                             System.out.println(ex.getMessage());
@@ -154,8 +177,8 @@ public class Main {
                         break;
                     }
                     XMLEncoder encoder = new XMLEncoder(new BufferedOutputStream(fos));
-                    encoder.writeObject(personList.size());
-                    for(Person one : personList){
+                    encoder.writeObject((Integer)aboutmeList.size());
+                    for(Aboutme one : aboutmeList){
                         encoder.writeObject(one);
                     }
                     encoder.close();
@@ -164,7 +187,7 @@ public class Main {
                 case 6:
                     System.out.println("1 - Створити новий список(не зберігається попередній)");
                     System.out.println("2 - Додати до поточного списку");
-                    command = scan.nextByte();
+                    command = scan.nextInt();
                     switch(command){
                         case 1:
                             System.out.println("----Виберіть файл:");
@@ -173,16 +196,17 @@ public class Main {
                             FileInputStream fis;
                             try {
                                 fis = new FileInputStream(path_);
-                            }catch(FileNotFoundException ex){
+                            }
+                            catch(FileNotFoundException ex){
                                 System.err.println("FileNotFound");
                                 break;
                             }
                             XMLDecoder decoder = new XMLDecoder(new BufferedInputStream(fis));
                             Integer size = (Integer) decoder.readObject();
-                            personList = new ListContainer<>() ;
-                            Person.cleanPerson();
+                            aboutmeList = new ListContainer<>() ;
+                            Aboutme.cleanAboutme();
                             for (int i = 0; i < size; i++) {
-                                personList.add((Person) decoder.readObject());
+                                aboutmeList.add((Aboutme) decoder.readObject());
                             }
                             decoder.close();
 
@@ -194,14 +218,15 @@ public class Main {
                             FileInputStream fis_;
                             try {
                                 fis_ = new FileInputStream(path__);
-                            }catch(FileNotFoundException ex){
+                            }
+                            catch(FileNotFoundException ex){
                                 System.err.println("FileNotFound");
                                 break;
                             }
                             XMLDecoder decoder_ = new XMLDecoder(new BufferedInputStream(fis_));
                             Integer size_ = (Integer) decoder_.readObject();
                             for (int i = 0; i < size_; i++) {
-                                personList.add((Person) decoder_.readObject());
+                                aboutmeList.add((Aboutme) decoder_.readObject());
                             }
                             decoder_.close();
                             break;
